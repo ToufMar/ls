@@ -27,4 +27,16 @@ typedef struct s_struct
   uid_t uid;
   gid_t gid;
 }              t_struct;
+
+typedef struct s_llist
+{
+  int size;
+  int nlink;
+  struct s_llist *next;
+}
+               t_llist;
+
+void		ft_push_back_t(t_llist **list, t_struct *s);
+t_llist *add_link(t_struct *s);
+void print_list(t_llist *list);
 #endif

@@ -40,9 +40,19 @@ void print_rights(t_struct *s)
   ft_putstr("  ");
 }
 
+void get_name_grpe(t_struct *s)
+{
+  s->uid = getuid();
+  s->usr = getpwuid(s->uid);
+  s->gid = getgid();
+  s->grp = getgrgid(s->gid);
+}
+
 int main(int ac, char **av)
 {
   t_struct s;
+  t_llist *list;
+  list = NULL;
   s.rep = NULL;
   s.readenfile = NULL;
   s.rep = opendir("./");
@@ -53,10 +63,7 @@ int main(int ac, char **av)
   }
   else
     printf("ok fichier ouvert\n");
-  s.uid = getuid();
-  s.usr = getpwuid(s.uid);
-  s.gid = getgid();
-  s.grp = getgrgid(s.gid);
+  get_name_grpe(&s);
   while ((s.readenfile = readdir(s.rep)) != NULL)
   {
     stat(s.readenfile->d_name, &s.sb);
@@ -67,13 +74,15 @@ int main(int ac, char **av)
     SPACE;
     ft_putstr(s.grp->gr_name);
     SPACE;
-    ft_putnbr((int)s.sb.st_size);
+//    ft_putnbr((int)s.sb.st_size);
     SPACE;
     print_time(s.sb.st_mtime);
     SPACE;
     ft_putstr(s.readenfile->d_name);
     NL;
+    ft_push_back_t(&list, &s);
   }
+  print_list(list);
   if (s.readenfile == NULL)
   {
     printf("probleme de lecture\n");

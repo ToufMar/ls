@@ -2,7 +2,7 @@
 
 NAME = libft/libft.a
 
-GCC = gcc main.c -o ft_ls
+GCC = gcc main.c list_tools.c -o ft_ls
 
 
 all: $(NAME)
