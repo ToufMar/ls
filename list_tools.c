@@ -31,7 +31,7 @@ t_llist *add_link(t_struct *s)
 	tmp = malloc(sizeof(t_llist));
 	if (tmp)
 	{
-//    stat(s->readenfile->d_name, &s->sb);
+		tmp->nlink = (int)s->sb.st_nlink;
 		tmp->size = (int)s->sb.st_size;
 		tmp->next = NULL;
 	}

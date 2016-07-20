@@ -15,9 +15,6 @@
 typedef struct s_struct
 {
   DIR *rep;
-  char *rights;
-  int blocks;
-  int oct;
   char *name;
   struct dirent *readenfile;
   struct stat sb;
@@ -28,11 +25,21 @@ typedef struct s_struct
   gid_t gid;
 }              t_struct;
 
+typedef struct s_parse
+{
+  int l;
+  int R;
+  int a;
+  int r;
+  int t;
+}               t_parse;
+
 typedef struct s_llist
 {
-  int size;
-  int nlink;
-  struct s_llist *next;
+  char            droits[11];
+  int             size;
+  int             nlink;
+  struct s_llist  *next;
 }
                t_llist;
 

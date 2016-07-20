@@ -25,19 +25,54 @@ void print_time(time_t date)
 	free(s1);
 }
 
-void print_rights(t_struct *s)
+void print_rights2(t_struct *s, t_llist *list)
 {
-  S_ISDIR(s->sb.st_mode) ? ft_putchar('d') : ft_putchar('-');
-  (s->sb.st_mode & S_IRUSR) ? ft_putchar('r') : ft_putchar('-');
-  (s->sb.st_mode & S_IWUSR) ? ft_putchar('w') : ft_putchar('-');
-  (s->sb.st_mode & S_IXUSR) ? ft_putchar('x') : ft_putchar('-');
-  (s->sb.st_mode & S_IRGRP) ? ft_putchar('r') : ft_putchar('-');
-  (s->sb.st_mode & S_IWGRP) ? ft_putchar('w') : ft_putchar('-');
-  (s->sb.st_mode & S_IXGRP) ? ft_putchar('x') : ft_putchar('-');
-  (s->sb.st_mode & S_IROTH) ? ft_putchar('r') : ft_putchar('-');
-  (s->sb.st_mode & S_IWOTH) ? ft_putchar('w') : ft_putchar('-');
-  (s->sb.st_mode & S_IXOTH) ? ft_putchar('x') : ft_putchar('-');
-  ft_putstr("  ");
+  if (s->sb.st_mode & S_IWGRP)
+    list->droits[5] = 'w';
+  else
+    list->droits[5] = '-';
+  if (s->sb.st_mode & S_IXGRP)
+    list->droits[6] = 'x';
+  else
+    list->droits[6] = '-';
+  if (s->sb.st_mode & S_IROTH)
+    list->droits[7] = 'r';
+  else
+    list->droits[7] = '-';
+  if (s->sb.st_mode & S_IWOTH)
+    list->droits[8] = 'w';
+  else
+    list->droits[8] = '-';
+  if (s->sb.st_mode & S_IXOTH)
+    list->droits[9] = 'x';
+  else
+    list->droits[9] = '-';
+}
+
+void print_rights(t_struct *s, t_llist *list)
+{
+  if (S_ISDIR(s->sb.st_mode))
+    list->droits[0] = 'd';
+  else
+    list->droits[0] = '-';
+  if (s->sb.st_mode & S_IRUSR)
+    list->droits[1] = 'r';
+  else
+    list->droits[1] = '-';
+  if (s->sb.st_mode & S_IWUSR)
+    list->droits[2] = 'w';
+  else
+    list->droits[2] = '-';
+  if (s->sb.st_mode & S_IXUSR)
+    list->droits[3] = 'x';
+  else
+    list->droits[3] = '-';
+  if (s->sb.st_mode & S_IRGRP)
+    list->droits[4] = 'r';
+  else
+    list->droits[4] = '-';
+  print_rights2(s, list);
+  list->droits[10] = '\0';
 }
 
 void get_name_grpe(t_struct *s)
@@ -48,11 +83,51 @@ void get_name_grpe(t_struct *s)
   s->grp = getgrgid(s->gid);
 }
 
+void check_opt(char *av, t_parse *parse)
+{
+  int i;
+
+  i = 0;
+  while (av[i])
+  {
+    if (av[i] == 'l')
+      parse->l = 1;
+    if (av[i] == 'R')
+      parse->R = 1;
+    if (av[i] == 'a')
+      parse->a = 1;
+    if (av[i] == 'r')
+      parse->r = 1;
+    if (av[i] == 't')
+      parse->t = 1;
+    i++;
+  }
+}
+
+int init(t_parse *parse, char *av)
+{
+  parse->l = 0;
+  parse->R = 0;
+  parse->a = 0;
+  parse->r = 0;
+  parse->t = 0;
+
+  if (av[0] == '-')
+  {
+    check_opt(av, parse);
+    return (1);
+  }
+  else
+    return (0);
+}
+
 int main(int ac, char **av)
 {
   t_struct s;
   t_llist *list;
-  list = NULL;
+  t_parse parse;
+  init(&parse, av[1]);
+/*  list = NULL;
   s.rep = NULL;
   s.readenfile = NULL;
   s.rep = opendir("./");
@@ -68,13 +143,10 @@ int main(int ac, char **av)
   {
     stat(s.readenfile->d_name, &s.sb);
     print_rights(&s);
-    ft_putnbr((int)s.sb.st_nlink);
     SPACE;
     ft_putstr(s.usr->pw_name);
     SPACE;
     ft_putstr(s.grp->gr_name);
-    SPACE;
-//    ft_putnbr((int)s.sb.st_size);
     SPACE;
     print_time(s.sb.st_mtime);
     SPACE;
@@ -95,7 +167,7 @@ int main(int ac, char **av)
     printf("mal fermé");
      return (0);
   }
-  return (0);
+  return (0);*/
 }
 /*void affdossier (char *nom_dossier)
 {
