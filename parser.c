@@ -1,6 +1,6 @@
 #include "header.h"
 
-void  stock_time(time_t date, t_llist *list)
+void  stock_time(time_t date, t_info *i)
 {
   char	*s1;
 	char	*s2;
@@ -20,58 +20,58 @@ void  stock_time(time_t date, t_llist *list)
 	else
 		s1 = ft_strsub(s1, 4, 12);
 	s1[12] = '\0';
-	list->date = ft_strdup(s1);
+	i->date = ft_strdup(s1);
 	free(s1);
 }
 
-void stock_rights2(t_struct *s, t_llist *list)
+void stock_rights2(t_struct *s, t_info *i)
 {
   if (s->sb.st_mode & S_IWGRP)
-    list->droits[5] = 'w';
+    i->droits[5] = 'w';
   else
-    list->droits[5] = '-';
+    i->droits[5] = '-';
   if (s->sb.st_mode & S_IXGRP)
-    list->droits[6] = 'x';
+    i->droits[6] = 'x';
   else
-    list->droits[6] = '-';
+    i->droits[6] = '-';
   if (s->sb.st_mode & S_IROTH)
-    list->droits[7] = 'r';
+    i->droits[7] = 'r';
   else
-    list->droits[7] = '-';
+    i->droits[7] = '-';
   if (s->sb.st_mode & S_IWOTH)
-    list->droits[8] = 'w';
+    i->droits[8] = 'w';
   else
-    list->droits[8] = '-';
+    i->droits[8] = '-';
   if (s->sb.st_mode & S_IXOTH)
-    list->droits[9] = 'x';
+    i->droits[9] = 'x';
   else
-    list->droits[9] = '-';
+    i->droits[9] = '-';
 }
 
-void stock_rights(t_struct *s, t_llist *list)
+void stock_rights(t_struct *s, t_info *i)
 {
   if (S_ISDIR(s->sb.st_mode))
-    list->droits[0] = 'd';
+    i->droits[0] = 'd';
   else
-    list->droits[0] = '-';
+    i->droits[0] = '-';
   if (s->sb.st_mode & S_IRUSR)
-    list->droits[1] = 'r';
+    i->droits[1] = 'r';
   else
-    list->droits[1] = '-';
+    i->droits[1] = '-';
   if (s->sb.st_mode & S_IWUSR)
-    list->droits[2] = 'w';
+    i->droits[2] = 'w';
   else
-    list->droits[2] = '-';
+    i->droits[2] = '-';
   if (s->sb.st_mode & S_IXUSR)
-    list->droits[3] = 'x';
+    i->droits[3] = 'x';
   else
-    list->droits[3] = '-';
+    i->droits[3] = '-';
   if (s->sb.st_mode & S_IRGRP)
-    list->droits[4] = 'r';
+    i->droits[4] = 'r';
   else
-    list->droits[4] = '-';
-  stock_rights2(s, list);
-  list->droits[10] = '\0';
+    i->droits[4] = '-';
+  stock_rights2(s, i);
+  i->droits[10] = '\0';
 }
 
 void get_name_grpe(t_struct *s)
@@ -82,7 +82,7 @@ void get_name_grpe(t_struct *s)
   s->grp = getgrgid(s->gid);
 }
 
-void check_opt(char *av, t_parse *parse)
+void check_opt(char *av, t_parse *p)
 {
   int i;
 
@@ -90,27 +90,21 @@ void check_opt(char *av, t_parse *parse)
   while (av[i])
   {
     if (av[i] == 'l')
-      parse->l = 1;
+      p->l = 1;
     if (av[i] == 'R')
-      parse->R = 1;
+      p->R = 1;
     if (av[i] == 'a')
-      parse->a = 1;
+      p->a = 1;
     if (av[i] == 'r')
-      parse->r = 1;
+      p->r = 1;
     if (av[i] == 't')
-      parse->t = 1;
+      p->t = 1;
     i++;
   }
 }
 
-int init(t_parse *parse, char *av)
+int init_parse(t_parse *parse, char *av, t_struct *s)
 {
-  parse->l = 0;
-  parse->R = 0;
-  parse->a = 0;
-  parse->r = 0;
-  parse->t = 0;
-
   if (av[0] == '-')
   {
     check_opt(av, parse);
@@ -118,4 +112,15 @@ int init(t_parse *parse, char *av)
   }
   else
     return (0);
+}
+
+void init_value(t_parse *parse, t_struct *s)
+{
+  parse->l = 0;
+  parse->R = 0;
+  parse->a = 0;
+  parse->r = 0;
+  parse->t = 0;
+  s->rep = NULL;
+  s->readenfile = NULL;
 }

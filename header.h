@@ -9,7 +9,6 @@
 # include <grp.h>
 # include "libft/libft.h"
 # include <time.h>
-
 # define SPACE ft_putchar(' ');
 # define NL ft_putchar('\n');
 typedef struct s_struct
@@ -35,7 +34,7 @@ typedef struct s_parse
   int t;
 }               t_parse;
 
-typedef struct s_llist
+typedef struct s_info
 {
   char            droits[11];
   int             size;
@@ -46,25 +45,13 @@ typedef struct s_llist
   int             date2;
   char            *folder;
   char            *path;
-}
-               t_llist;
+}             t_info;
 
-void		ft_push_back_t(t_llist **list, t_struct *s);
-t_llist *add_link(t_struct *s);
-void print_list(t_llist *list, t_struct *s, t_parse *p);
-void stock_rights(t_struct *s, t_llist *list);
-void  stock_time(time_t date, t_llist *list);
-void  stock_time(time_t date, t_llist *list);
-void stock_rights2(t_struct *s, t_llist *list);
-void stock_rights(t_struct *s, t_llist *list);
-void get_name_grpe(t_struct *s);
+int init_parse(t_parse *parse, char *av, t_struct *s);
+void init_value(t_parse *parse, t_struct *s);
 void check_opt(char *av, t_parse *parse);
-int init(t_parse *parse, char *av);
-void ls_l(t_llist *list, t_struct *s);
-void choose_opt(t_llist *list, t_struct *s, t_parse *p);
-void ls(t_llist *list, t_struct *s);
-void trie_list(t_llist *list, t_struct *s);
-void    swap_info(t_llist *elem1, t_llist *elem2);
-void swap_string(char **a, char **b);
-void swap_droits(char a, char b);
+void get_name_grpe(t_struct *s);
+void stock_rights(t_struct *s, t_info *i);
+void stock_rights2(t_struct *s, t_info *i);
+void  stock_time(time_t date, t_info *i);
 #endif
